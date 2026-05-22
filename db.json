@@ -1,0 +1,43 @@
+{
+  "users": [
+    {
+      "name": "SRINJAY KAR",
+      "email": "srinjay2021@gmail.com",
+      "password": "Srin@2024",
+      "id": "ICFUCEqXg5E"
+    },
+    {
+      "name": "yashwanth d",
+      "email": "yashwanthd18yashu@gmail.com",
+      "password": "yashu2006",
+      "id": "7OHzthSTDts"
+    }
+  ],
+  "slots": [
+    {
+      "id": "1",
+      "sport": "Football",
+      "time": "8:00 AM - 9:00 AM",
+      "status": "Available",
+      "bookedBy": "",
+      "bookingDate": ""
+    },
+    {
+      "id": "2",
+      "sport": "Cricket",
+      "time": "10:00 AM - 11:00 AM",
+      "status": "Available",
+      "bookedBy": "",
+      "bookingDate": ""
+    },
+    {
+      "id": "3",
+      "sport": "Basketball",
+      "time": "4:00 PM - 5:00 PM",
+      "status": "Available",
+      "bookedBy": "",
+      "bookingDate": ""
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
+}
