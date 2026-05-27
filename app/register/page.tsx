@@ -6,61 +6,58 @@ import { useRouter } from "next/navigation";
 export default function RegisterPage() {
   const router = useRouter();
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [name, setName] =
+    useState("");
 
-  const handleRegister = async (
-    e: React.FormEvent
+  const [email, setEmail] =
+    useState("");
+
+  const [password, setPassword] =
+    useState("");
+
+  const handleSubmit = async (
+    e: any
   ) => {
     e.preventDefault();
 
-    if (!name || !email || !password) {
-      alert("Please fill all fields");
-      return;
-    }
-
     try {
-      // Get Existing Users
-      const res = await fetch(
-        "https://college-ground-booking-api.onrender.com"
-      );
-
-      const users = await res.json();
-
-      // Check Duplicate User
-      const existingUser = users.find(
-        (user: any) => user.email === email
-      );
-
-      if (existingUser) {
-        alert("User already exists");
-        return;
-      }
-
-      // New User
-      const newUser = {
-        name,
-        email,
-        password,
-      };
-
-      // Save User
-      await fetch(
-        "https://college-ground-booking-api.onrender.com",
+      const response = await fetch(
+        "https://college-ground-booking-api.onrender.com/users",
         {
           method: "POST",
+
           headers: {
             "Content-Type":
               "application/json",
           },
-          body: JSON.stringify(newUser),
+
+          body: JSON.stringify({
+            name,
+            email,
+            password,
+          }),
         }
       );
 
-      alert("Registration Successful");
+      if (!response.ok) {
+        throw new Error(
+          "Signup failed"
+        );
+      }
 
-      router.push("/login");
+      const data =
+        await response.json();
+
+      localStorage.setItem(
+        "loggedInUser",
+        JSON.stringify(data)
+      );
+
+      alert(
+        "Signup Successful"
+      );
+
+      router.push("/profile");
     } catch (error) {
       console.log(error);
 
@@ -69,58 +66,61 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="bg-white shadow-2xl rounded-3xl p-10 w-full max-w-md">
-        <h1 className="text-5xl font-bold text-green-600 text-center mb-10">
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-10 rounded-3xl shadow-2xl w-full max-w-xl"
+      >
+        <h1 className="text-6xl font-bold text-green-600 text-center mb-10">
           Sign Up
         </h1>
 
-        <form
-          onSubmit={handleRegister}
-          className="space-y-6"
+        <input
+          type="text"
+          placeholder="Enter Name"
+          value={name}
+          onChange={(e) =>
+            setName(
+              e.target.value
+            )
+          }
+          className="w-full p-5 border rounded-2xl mb-6 text-2xl"
+          required
+        />
+
+        <input
+          type="email"
+          placeholder="Enter Email"
+          value={email}
+          onChange={(e) =>
+            setEmail(
+              e.target.value
+            )
+          }
+          className="w-full p-5 border rounded-2xl mb-6 text-2xl"
+          required
+        />
+
+        <input
+          type="password"
+          placeholder="Enter Password"
+          value={password}
+          onChange={(e) =>
+            setPassword(
+              e.target.value
+            )
+          }
+          className="w-full p-5 border rounded-2xl mb-8 text-2xl"
+          required
+        />
+
+        <button
+          type="submit"
+          className="w-full bg-green-600 text-white text-3xl font-bold py-4 rounded-2xl hover:bg-green-700"
         >
-          {/* Name */}
-          <input
-            type="text"
-            placeholder="Enter Name"
-            value={name}
-            onChange={(e) =>
-              setName(e.target.value)
-            }
-            className="w-full border border-gray-300 p-4 rounded-xl outline-none focus:ring-2 focus:ring-green-500"
-          />
-
-          {/* Email */}
-          <input
-            type="email"
-            placeholder="Enter Email"
-            value={email}
-            onChange={(e) =>
-              setEmail(e.target.value)
-            }
-            className="w-full border border-gray-300 p-4 rounded-xl outline-none focus:ring-2 focus:ring-green-500"
-          />
-
-          {/* Password */}
-          <input
-            type="password"
-            placeholder="Enter Password"
-            value={password}
-            onChange={(e) =>
-              setPassword(e.target.value)
-            }
-            className="w-full border border-gray-300 p-4 rounded-xl outline-none focus:ring-2 focus:ring-green-500"
-          />
-
-          {/* Signup Button */}
-          <button
-            type="submit"
-            className="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl text-lg font-semibold transition"
-          >
-            Sign Up
-          </button>
-        </form>
-      </div>
+          Sign Up
+        </button>
+      </form>
     </div>
   );
 }
