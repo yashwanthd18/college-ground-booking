@@ -6,95 +6,106 @@ import { useRouter } from "next/navigation";
 export default function LoginPage() {
   const router = useRouter();
 
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [email, setEmail] =
+    useState("");
+
   const [password, setPassword] =
     useState("");
 
-  const handleLogin = async (
-    e: React.FormEvent
-  ) => {
-    e.preventDefault();
+  const handleLogin =
+    async () => {
+      if (
+        !email ||
+        !password
+      ) {
+        alert(
+          "Fill all fields"
+        );
+        return;
+      }
 
-    const res = await fetch(
-      "https://college-ground-booking-api.onrender.com"
-    );
+      try {
+        const response =
+          await fetch(
+            `https://college-ground-booking-api.onrender.com/users?email=${email}&password=${password}`
+          );
 
-    const users = await res.json();
+        const data =
+          await response.json();
 
-    const foundUser = users.find(
-      (user: any) =>
-        user.email === email &&
-        user.password === password
-    );
+        if (
+          data.length === 0
+        ) {
+          alert(
+            "Invalid Credentials"
+          );
+          return;
+        }
 
-    if (!foundUser) {
-      alert("Invalid Credentials");
-      return;
-    }
+        localStorage.setItem(
+          "loggedInUser",
+          JSON.stringify(
+            data[0]
+          )
+        );
 
-    // Save Logged In User
-    localStorage.setItem(
-      "loggedInUser",
-      JSON.stringify(foundUser)
-    );
+        alert(
+          "Login Successful"
+        );
 
-    alert("Login Successful");
+        router.push(
+          "/dashboard"
+        );
+      } catch (error) {
+        console.log(error);
 
-    router.push("/profile");
-  };
+        alert(
+          "Server Error"
+        );
+      }
+    };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <div className="bg-white shadow-2xl rounded-3xl p-10 w-full max-w-md">
-        <h1 className="text-5xl font-bold text-blue-600 text-center mb-10">
+    <div className="min-h-screen bg-gray-100 flex justify-center items-center">
+      <div className="bg-white p-10 rounded-3xl shadow-2xl w-full max-w-xl">
+        <h1 className="text-6xl font-bold text-blue-600 text-center mb-10">
           Login
         </h1>
 
-        <form
-          onSubmit={handleLogin}
-          className="space-y-6"
-        >
-          {/* Name */}
-          <input
-            type="text"
-            placeholder="Enter Name"
-            value={name}
-            onChange={(e) =>
-              setName(e.target.value)
-            }
-            className="w-full border border-gray-300 p-4 rounded-xl"
-          />
-
-          {/* Email */}
+        <div className="space-y-6">
           <input
             type="email"
-            placeholder="Enter Email"
+            placeholder="Enter email"
             value={email}
             onChange={(e) =>
-              setEmail(e.target.value)
+              setEmail(
+                e.target.value
+              )
             }
-            className="w-full border border-gray-300 p-4 rounded-xl"
+            className="w-full p-5 rounded-2xl border text-2xl"
           />
 
-          {/* Password */}
           <input
             type="password"
-            placeholder="Enter Password"
+            placeholder="Enter password"
             value={password}
             onChange={(e) =>
-              setPassword(e.target.value)
+              setPassword(
+                e.target.value
+              )
             }
-            className="w-full border border-gray-300 p-4 rounded-xl"
+            className="w-full p-5 rounded-2xl border text-2xl"
           />
 
           <button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-4 rounded-xl text-lg font-semibold hover:bg-blue-700"
+            onClick={
+              handleLogin
+            }
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white text-3xl font-bold py-5 rounded-2xl"
           >
             Login
           </button>
-        </form>
+        </div>
       </div>
     </div>
   );
