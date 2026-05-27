@@ -47,7 +47,7 @@ export default function RegisterPage() {
 
       // Save User
       await fetch(
-        "http://localhost:5000/users",
+        "https://college-ground-booking-api.onrender.com",
         {
           method: "POST",
           headers: {
