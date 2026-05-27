@@ -23,7 +23,7 @@ export default function RegisterPage() {
     try {
       // Get Existing Users
       const res = await fetch(
-        "http://localhost:5000/users"
+        "https://college-ground-booking-api.onrender.com"
       );
 
       const users = await res.json();

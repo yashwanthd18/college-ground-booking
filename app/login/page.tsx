@@ -17,7 +17,7 @@ export default function LoginPage() {
     e.preventDefault();
 
     const res = await fetch(
-      "http://localhost:5000/users"
+      "https://college-ground-booking-api.onrender.com"
     );
 
     const users = await res.json();

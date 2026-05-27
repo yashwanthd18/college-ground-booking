@@ -22,7 +22,7 @@ export default function DashboardPage() {
 
   // Fetch Slots
   useEffect(() => {
-    fetch("http://localhost:5000/slots")
+    fetch("https://college-ground-booking-api.onrender.com")
       .then((res) => res.json())
       .then((data) => {
         setSlots(data);
